@@ -16,6 +16,350 @@
     }
   },
   {
+    "id": "tokyo-2023",
+    "name": "Tokyo Marathon 2023",
+    "city": "Tokio",
+    "country": "Japón",
+    "date": "2023-03-05",
+    "time": "",
+    "rotation": 0,
+    "osm": "bbbike:Tokyo",
+    "course": {
+      "type": "geojson",
+      "path": "data/sources/tokyo-official-mymaps.geojson",
+      "source": "Traza oficial de la Tokyo Marathon Foundation (Google My Maps del sitio oficial); el recorrido coincide con el mapa oficial de cortes de tránsito de 2023",
+      "source_url": "https://www.marathon.tokyo/about/course/"
+    }
+  },
+  {
+    "id": "chicago-2023",
+    "name": "Bank of America Chicago Marathon 2023",
+    "city": "Chicago",
+    "country": "Estados Unidos",
+    "date": "2023-10-08",
+    "time": "",
+    "rotation": 0,
+    "osm": "bbbike:Chicago",
+    "course": {
+      "type": "waypoints",
+      "waypoints": [
+        [
+          41.8806,
+          -87.6207
+        ],
+        [
+          41.885,
+          -87.6207
+        ],
+        [
+          41.8885,
+          -87.6207
+        ],
+        [
+          41.8918,
+          -87.62023
+        ],
+        [
+          41.89167,
+          -87.62807
+        ],
+        [
+          41.888,
+          -87.628
+        ],
+        [
+          41.8835,
+          -87.6278
+        ],
+        [
+          41.87821,
+          -87.6277
+        ],
+        [
+          41.87814,
+          -87.63226
+        ],
+        [
+          41.885,
+          -87.6324
+        ],
+        [
+          41.89,
+          -87.6325
+        ],
+        [
+          41.9,
+          -87.6327
+        ],
+        [
+          41.908,
+          -87.6331
+        ],
+        [
+          41.9133,
+          -87.6317
+        ],
+        [
+          41.91928,
+          -87.63485
+        ],
+        [
+          41.92567,
+          -87.63606
+        ],
+        [
+          41.92575,
+          -87.63363
+        ],
+        [
+          41.929,
+          -87.6357
+        ],
+        [
+          41.93291,
+          -87.63931
+        ],
+        [
+          41.9377,
+          -87.63946
+        ],
+        [
+          41.9412,
+          -87.63957
+        ],
+        [
+          41.94483,
+          -87.64129
+        ],
+        [
+          41.94872,
+          -87.6435
+        ],
+        [
+          41.95121,
+          -87.64491
+        ],
+        [
+          41.9526,
+          -87.64504
+        ],
+        [
+          41.95275,
+          -87.64965
+        ],
+        [
+          41.9454,
+          -87.6461
+        ],
+        [
+          41.9392,
+          -87.64436
+        ],
+        [
+          41.93281,
+          -87.64491
+        ],
+        [
+          41.92699,
+          -87.64131
+        ],
+        [
+          41.92197,
+          -87.63827
+        ],
+        [
+          41.92196,
+          -87.63894
+        ],
+        [
+          41.9165,
+          -87.6387
+        ],
+        [
+          41.9111,
+          -87.6386
+        ],
+        [
+          41.9111,
+          -87.6347
+        ],
+        [
+          41.905,
+          -87.6345
+        ],
+        [
+          41.896,
+          -87.6342
+        ],
+        [
+          41.8869,
+          -87.634
+        ],
+        [
+          41.88608,
+          -87.63672
+        ],
+        [
+          41.8835,
+          -87.63706
+        ],
+        [
+          41.8793,
+          -87.6369
+        ],
+        [
+          41.8788,
+          -87.67
+        ],
+        [
+          41.87875,
+          -87.67658
+        ],
+        [
+          41.87747,
+          -87.67655
+        ],
+        [
+          41.8776,
+          -87.67
+        ],
+        [
+          41.8778,
+          -87.66
+        ],
+        [
+          41.87795,
+          -87.64723
+        ],
+        [
+          41.8696,
+          -87.6469
+        ],
+        [
+          41.8695,
+          -87.655
+        ],
+        [
+          41.86934,
+          -87.66164
+        ],
+        [
+          41.864,
+          -87.6615
+        ],
+        [
+          41.85788,
+          -87.66131
+        ],
+        [
+          41.8578,
+          -87.64665
+        ],
+        [
+          41.85469,
+          -87.64655
+        ],
+        [
+          41.85258,
+          -87.6512
+        ],
+        [
+          41.8527,
+          -87.645
+        ],
+        [
+          41.8528,
+          -87.638
+        ],
+        [
+          41.85285,
+          -87.63203
+        ],
+        [
+          41.849,
+          -87.6319
+        ],
+        [
+          41.84553,
+          -87.63185
+        ],
+        [
+          41.84564,
+          -87.62355
+        ],
+        [
+          41.84,
+          -87.6234
+        ],
+        [
+          41.835,
+          -87.6233
+        ],
+        [
+          41.83105,
+          -87.62324
+        ],
+        [
+          41.83106,
+          -87.62175
+        ],
+        [
+          41.835,
+          -87.6218
+        ],
+        [
+          41.83838,
+          -87.62189
+        ],
+        [
+          41.83838,
+          -87.6234
+        ],
+        [
+          41.845,
+          -87.6236
+        ],
+        [
+          41.852,
+          -87.6238
+        ],
+        [
+          41.86,
+          -87.624
+        ],
+        [
+          41.8675,
+          -87.62414
+        ],
+        [
+          41.86752,
+          -87.622
+        ],
+        [
+          41.86752,
+          -87.6204
+        ],
+        [
+          41.8697,
+          -87.6206
+        ]
+      ],
+      "source": "Mapa oficial 2023 del Bank of America Chicago Marathon (23 BACM Course Map), trazado sobre OpenStreetMap",
+      "source_url": "https://www.oldstpats.org/uploads/1/2/6/7/126724029/2023-bank-of-america-chicago-marathon-course-map.pdf"
+    },
+    "water_fill": {
+      "relations": [
+        1205149
+      ],
+      "points": [
+        [
+          -87.55,
+          41.92
+        ]
+      ]
+    }
+  },
+  {
     "id": "san-juan-2025",
     "name": "Maratón Internacional de San Juan",
     "city": "San Juan",
@@ -224,6 +568,22 @@
       ],
       "source": "Mapa oficial 42K del Manual del Corredor MISJ 2025 (Adventure Pro) y cortes de calle publicados; puntos de giro sobre calles de OSM",
       "source_url": "https://web.archive.org/web/20250803141452/https://www.maratondesanjuan.com/MANUAL-MISJ-2025.pdf"
+    }
+  },
+  {
+    "id": "amsterdam-2025",
+    "name": "TCS Amsterdam Marathon 2025",
+    "city": "Ámsterdam",
+    "country": "Países Bajos",
+    "date": "2025-10-19",
+    "time": "",
+    "rotation": 0,
+    "osm": "bbbike:Amsterdam",
+    "course": {
+      "type": "geojson",
+      "path": "data/sources/amsterdam-2025-course.geojson",
+      "source": "Traza GPX del recorrido 2024 (Go&Race), sin cambios en 2025 y verificada contra los puntos kilométricos del mapa oficial 2025; salida en el Estadio Olímpico",
+      "source_url": "https://do.occdn.net/p/75/f/parcours-tcsam25-2025-1.png"
     }
   },
   {

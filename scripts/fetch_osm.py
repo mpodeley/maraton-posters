@@ -149,6 +149,33 @@ def coastal_water(coast_lines, bbox):
     return unary_union(water) if water else None
 
 
+def relation_water(path, frame, spec):
+    """Close large water bodies whose relation is cut by the extract (e.g. Lake Michigan).
+
+    spec: {"relations": [osm ids], "points": [[lon, lat], ...]}. Member ways are
+    noded with the map frame; faces that contain a hint point become water.
+    """
+    wanted = set(spec["relations"])
+    ways = set()
+    for obj in osmium.FileProcessor(str(path), osmium.osm.RELATION):
+        if obj.id in wanted:
+            ways |= {m.ref for m in obj.members if m.type == "w"}
+    wkb = osmium.geom.WKBFactory()
+    lines = []
+    for obj in osmium.FileProcessor(str(path)).with_locations():
+        if obj.is_way() and obj.id in ways:
+            try:
+                lines.append(shapely.wkb.loads(wkb.create_linestring(obj), hex=True))
+            except RuntimeError:
+                continue
+    clipped = [frame.intersection(l) for l in lines]
+    noded = unary_union([frame.exterior] + [c for c in clipped if not c.is_empty])
+    hints = [shapely.Point(p) for p in spec["points"]]
+    faces = [f for f in polygonize(noded) if any(f.contains(h) for h in hints)]
+    print(f"  water_fill: {len(lines)} member ways, {len(faces)} faces")
+    return unary_union(faces) if faces else None
+
+
 def simplify_m(geom, meters, lat):
     """Simplify in a locally equal-area lon/lat frame."""
     k = math.cos(math.radians(lat))
@@ -180,6 +207,10 @@ def build(race):
         sea = coastal_water(raw["coast"], bbox)
         if sea is not None:
             parts.append(sea)
+    if race.get("water_fill"):
+        filled = relation_water(pbf, frame, race["water_fill"])
+        if filled is not None:
+            parts.append(filled)
     parts = [p if p.is_valid else p.buffer(0) for p in parts]
     layers["water"] = frame.intersection(unary_union(parts)) if parts else None
     green = [p if p.is_valid else p.buffer(0) for p in raw["green"]]

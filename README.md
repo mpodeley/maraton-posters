@@ -36,6 +36,7 @@ cd .. && node scripts/to_topo.mjs <id>             # TopoJSON para el navegador
 
 - `build_course.py` acepta GPX, GeoJSON, una traza existente o puntos de giro. Las trazas se ajustan a la red de calles de OpenStreetMap con map matching (Viterbi sobre un grafo sin restricciones de mano única, porque las calles van cortadas). Las marcas de km se ubican escalando la longitud GPS a la distancia oficial (`distance_km`, 42.195 por defecto; 21.0975 en medias maratones).
 - `fetch_osm.py` lee extractos de BBBike o Geofabrik (cacheados en `data/raw/pbf/`) y simplifica cada capa con una tolerancia de 3 a 6 m, muy por debajo de lo que se ve en un 70 × 100.
+- Si un lago o un río grande llega cortado en el extracto y no se arma su polígono (el lago Michigan en Chicago), `water_fill` en `races.json` lo cierra contra el borde del mapa a partir de un punto de referencia en el agua.
 - `debug_course.py` dibuja recortes del recorrido sobre las calles para revisarlo a ojo.
 
 ## Límites
