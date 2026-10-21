@@ -1,8 +1,8 @@
 """Normalize an official marathon course into data/courses/<id>.geojson.
 
 Output: FeatureCollection with the course LineString plus point features for
-start, finish, half and every 5 km, positioned by scaling the GPS length to
-the certified 42.195 km.
+start, finish, half (marathons only) and every 5 km, positioned by scaling the
+GPS length to the certified race distance (race["distance_km"], default 42.195).
 """
 import argparse
 import json
@@ -99,13 +99,16 @@ def build(race):
     for a, b in zip(coords, coords[1:]):
         cum.append(cum[-1] + haversine_km(a, b))
     gps_km = cum[-1]
-    scale = MARATHON_KM / gps_km
+    total = race.get("distance_km", MARATHON_KM)
+    scale = total / gps_km
     cum_scaled = [d * scale for d in cum]
 
     feats = [{"type": "Feature", "properties": {"kind": "course", "gps_km": round(gps_km, 3)},
               "geometry": {"type": "LineString", "coordinates": round_coords(coords)}}]
-    marks = [(0, "start"), (MARATHON_KM, "finish"), (MARATHON_KM / 2, "half")]
-    marks += [(k, "km") for k in range(5, 42, 5)]
+    marks = [(0, "start"), (total, "finish")]
+    if total == MARATHON_KM:
+        marks.append((total / 2, "half"))
+    marks += [(k, "km") for k in range(5, int(total), 5) if k < total - 0.5]
     for km, kind in marks:
         p = point_at(coords, cum_scaled, km)
         feats.append({"type": "Feature", "properties": {"kind": kind, "km": round(km, 4)},
@@ -114,7 +117,7 @@ def build(race):
     out.write_text(json.dumps({"type": "FeatureCollection", "features": feats}))
     lons = [c[0] for c in coords]
     lats = [c[1] for c in coords]
-    print(f"{race['id']}: {len(coords)} pts, GPS {gps_km:.2f} km (scale {scale:.4f}), "
+    print(f"{race['id']}: {len(coords)} pts, GPS {gps_km:.2f} km (scale {scale:.4f}, {total} km), "
           f"bbox {min(lons):.4f},{min(lats):.4f},{max(lons):.4f},{max(lats):.4f}")
 
 

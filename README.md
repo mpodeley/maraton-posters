@@ -1,6 +1,6 @@
 # Pósters de maratón
 
-Aplicación web estática que dibuja el recorrido oficial de una maratón sobre la trama de su ciudad (calles por jerarquía, agua, parques y vías) y exporta el póster listo para imprenta.
+Aplicación web estática que dibuja el recorrido oficial de una maratón o media maratón sobre la trama de su ciudad (calles por jerarquía, agua, parques y vías) y exporta el póster listo para imprenta.
 
 ## Qué exporta
 
@@ -34,13 +34,13 @@ cd scripts
 cd .. && node scripts/to_topo.mjs <id>             # TopoJSON para el navegador
 ```
 
-- `build_course.py` acepta GPX, GeoJSON, una traza existente o puntos de giro. Las trazas se ajustan a la red de calles de OpenStreetMap con map matching (Viterbi sobre un grafo sin restricciones de mano única, porque las calles van cortadas). Las marcas de km se ubican escalando la longitud GPS a 42.195 km.
+- `build_course.py` acepta GPX, GeoJSON, una traza existente o puntos de giro. Las trazas se ajustan a la red de calles de OpenStreetMap con map matching (Viterbi sobre un grafo sin restricciones de mano única, porque las calles van cortadas). Las marcas de km se ubican escalando la longitud GPS a la distancia oficial (`distance_km`, 42.195 por defecto; 21.0975 en medias maratones).
 - `fetch_osm.py` lee extractos de BBBike o Geofabrik (cacheados en `data/raw/pbf/`) y simplifica cada capa con una tolerancia de 3 a 6 m, muy por debajo de lo que se ve en un 70 × 100.
 - `debug_course.py` dibuja recortes del recorrido sobre las calles para revisarlo a ojo.
 
 ## Límites
 
-El recorrido es una reconstrucción a partir de la fuente anotada en cada carrera (`course.source`). Puede apartarse unos metros del trazado medido en rampas, puentes de dos niveles y rotondas, y no sirve como referencia de distancia: la longitud dibujada se ajusta a 42.195 km por escala.
+El recorrido es una reconstrucción a partir de la fuente anotada en cada carrera (`course.source`). Puede apartarse unos metros del trazado medido en rampas, puentes de dos niveles y rotondas, y no sirve como referencia de distancia: la longitud dibujada se ajusta por escala a la distancia oficial.
 
 ## Créditos
 

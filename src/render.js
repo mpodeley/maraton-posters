@@ -292,7 +292,7 @@ function drawText(svg, state, data, fonts, L, c) {
   lines.push({ rule: true, gapAfter: 0.5 });
   const sub = t.subtitle || race.name;
   if (sub) lines.push({ font: fonts.bodyStrong, str: sub.toUpperCase(), size: base * 0.019, tracking: 0.28, gapAfter: 0.9 });
-  const details = [t.date ? formatDate(race.date) : null, t.distance ? "42.195 km" : null, t.time || null].filter(Boolean).join("   ·   ");
+  const details = [t.date ? formatDate(race.date) : null, t.distance ? `${race.distance_km ?? 42.195} km` : null, t.time || null].filter(Boolean).join("   ·   ");
   if (details) lines.push({ font: fonts.body, str: details, size: base * 0.017, tracking: 0.08, gapAfter: 0.9 });
   if (t.coords) lines.push({ font: fonts.body, str: formatCoords(courseCenter(data)), size: base * 0.0125, tracking: 0.18, opacity: 0.65, gapAfter: 0 });
 
