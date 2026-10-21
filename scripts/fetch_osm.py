@@ -59,6 +59,9 @@ def fetch_bbox(race, course):
 def ensure_pbf(spec):
     kind, name = spec.split(":", 1)
     path = DATA / "raw" / "pbf" / (name.replace("/", "_") + ".osm.pbf")
+    # A failed download can leave a tiny HTML error page behind; refetch it.
+    if path.exists() and path.stat().st_size < 1_000_000:
+        path.unlink()
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         url = PBF_SOURCES[kind].format(name=name)
