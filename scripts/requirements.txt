@@ -1,0 +1,6 @@
+shapely>=2.0
+scipy>=1.11
+numpy>=1.26
+osmium>=4.0
+requests>=2.31
+gpxpy>=1.6

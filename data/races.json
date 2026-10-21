@@ -1,0 +1,19 @@
+[
+  {
+    "id": "nyc-2026",
+    "name": "TCS New York City Marathon",
+    "city": "Nueva York",
+    "country": "Estados Unidos",
+    "date": "2026-11-01",
+    "time": "",
+    "rotation": 0,
+    "osm": "bbbike:NewYork",
+    "course": {
+      "type": "segments-json",
+      "path": "../nueva-york-2026/data/course.json",
+      "source": "Traza oficial 2024 (Strava, NYRR); circuito de cinco distritos sin cambios en 2025-2026",
+      "snap": true,
+      "snap_step": 150
+    }
+  }
+]

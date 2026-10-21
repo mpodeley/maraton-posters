@@ -1,0 +1,5 @@
+.venv/
+data/raw/
+data/cities/*.geojson
+node_modules/
+__pycache__/

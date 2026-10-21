@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pósters de maratón</title>
+  <meta name="description" content="Pósters imprimibles de recorridos de maratón sobre la trama de cada ciudad.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%2216%22 height=%2216%22 rx=%223%22 fill=%22%23f3ede2%22/%3E%3Cpath d=%22M3 13 L6 8 L9 10 L13 3%22 fill=%22none%22 stroke=%22%23d9480f%22 stroke-width=%222%22 stroke-linecap=%22round%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <aside id="panel">
+    <header>
+      <h1>Pósters de maratón</h1>
+      <p>Arrastrá el mapa para encuadrar, la rueda acerca y aleja.</p>
+    </header>
+
+    <section>
+      <h2>Carrera</h2>
+      <select id="race" data-bind="race"></select>
+    </section>
+
+    <section>
+      <h2>Formato</h2>
+      <label>Tamaño <select id="size" data-bind="size"></select></label>
+      <div class="seg">
+        <label><input type="radio" name="orient" value="portrait" data-bind="orient"> Vertical</label>
+        <label><input type="radio" name="orient" value="landscape" data-bind="orient"> Horizontal</label>
+      </div>
+      <label>Forma del mapa <select id="shape" data-bind="shape"></select></label>
+      <label class="check" id="frame-row"><input type="checkbox" data-bind="frame"> Filete alrededor del mapa</label>
+    </section>
+
+    <section>
+      <h2>Estilo</h2>
+      <div id="themes" class="themes"></div>
+      <details>
+        <summary>Colores a mano</summary>
+        <div id="colors" class="colors"></div>
+        <button type="button" id="reset-colors" class="link">Volver a los colores del tema</button>
+      </details>
+    </section>
+
+    <section>
+      <h2>Mapa</h2>
+      <div class="checks">
+        <label class="check"><input type="checkbox" data-bind="layers.water"> Agua</label>
+        <label class="check"><input type="checkbox" data-bind="layers.green"> Parques</label>
+        <label class="check"><input type="checkbox" data-bind="layers.rail"> Vías</label>
+        <label class="check"><input type="checkbox" data-bind="layers.roads_1"> Avenidas</label>
+        <label class="check"><input type="checkbox" data-bind="layers.roads_2"> Calles</label>
+        <label class="check"><input type="checkbox" data-bind="layers.roads_3"> Calles menores</label>
+      </div>
+      <label>Grosor de calles <output for="roadScale"></output>
+        <input type="range" id="roadScale" min="0.4" max="3" step="0.05" data-bind="roadScale"></label>
+      <label>Zoom <output for="zoom"></output>
+        <input type="range" id="zoom" min="0.3" max="8" step="0.01" data-bind="zoom"></label>
+      <label>Rotación <output for="rotation"></output>
+        <input type="range" id="rotation" min="-180" max="180" step="1" data-bind="rotation"></label>
+      <button type="button" id="recenter" class="link">Recentrar el recorrido</button>
+    </section>
+
+    <section>
+      <h2>Recorrido</h2>
+      <label>Grosor <output for="routeWidth"></output>
+        <input type="range" id="routeWidth" min="0.3" max="3" step="0.05" data-bind="route.width"></label>
+      <div class="checks">
+        <label class="check"><input type="checkbox" data-bind="route.halo"> Halo</label>
+        <label class="check"><input type="checkbox" data-bind="route.startFinish"> Largada y meta</label>
+        <label class="check"><input type="checkbox" data-bind="route.marks"> Marcas cada 5 km</label>
+        <label class="check"><input type="checkbox" data-bind="route.labels"> Números de km</label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Texto</h2>
+      <label class="check"><input type="checkbox" data-bind="text.show"> Mostrar texto</label>
+      <label>Título <input type="text" data-bind="text.title" placeholder="Nombre de la ciudad"></label>
+      <label>Subtítulo <input type="text" data-bind="text.subtitle" placeholder="Nombre de la carrera"></label>
+      <label>Tiempo <input type="text" data-bind="text.time" placeholder="3:45:12"></label>
+      <label>Tamaño del título <output for="titleScale"></output>
+        <input type="range" id="titleScale" min="0.5" max="1.6" step="0.01" data-bind="text.titleScale"></label>
+      <div class="checks">
+        <label class="check"><input type="checkbox" data-bind="text.date"> Fecha</label>
+        <label class="check"><input type="checkbox" data-bind="text.distance"> Distancia</label>
+        <label class="check"><input type="checkbox" data-bind="text.coords"> Coordenadas</label>
+      </div>
+      <label>Tipografía <select id="fonts" data-bind="fonts"></select></label>
+    </section>
+
+    <section>
+      <h2>Imprenta</h2>
+      <div class="checks">
+        <label class="check"><input type="checkbox" data-bind="bleed"> Sangrado de 3 mm</label>
+        <label class="check"><input type="checkbox" data-bind="cropMarks"> Marcas de corte</label>
+        <label class="check"><input type="checkbox" data-bind="guides"> Ver guías en pantalla</label>
+      </div>
+      <ul id="warnings" class="warnings" hidden></ul>
+      <div class="exports">
+        <button type="button" id="export-pdf" class="primary">PDF vectorial</button>
+        <button type="button" id="export-svg">SVG</button>
+        <span class="png">
+          <button type="button" id="export-png">PNG</button>
+          <select id="dpi" aria-label="Resolución del PNG">
+            <option value="300" selected>300 dpi</option>
+            <option value="200">200 dpi</option>
+            <option value="150">150 dpi</option>
+          </select>
+        </span>
+      </div>
+      <p class="note">El PDF sale en RGB con el texto convertido a curvas. La conversión a CMYK la hace la imprenta. Guía rosa: corte; guía celeste: zona segura de 10 mm.</p>
+    </section>
+
+    <footer id="source"></footer>
+  </aside>
+
+  <main>
+    <div id="stage" aria-label="Vista previa del póster"></div>
+    <div id="status" class="status"></div>
+  </main>
+
+  <script src="vendor/d3.min.js"></script>
+  <script src="vendor/topojson-client.min.js"></script>
+  <script src="vendor/opentype.min.js"></script>
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script src="vendor/svg2pdf.umd.min.js"></script>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "maraton-posters",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "topo": "node scripts/to_topo.mjs",
+    "serve": "python3 -m http.server 8765"
+  },
+  "devDependencies": {
+    "topojson-server": "3.0.1"
+  }
+}
