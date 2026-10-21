@@ -210,7 +210,7 @@ function options(select, entries) {
 }
 
 function buildControls() {
-  options(document.getElementById("race"), races.map((r) => [r.id, `${r.city} ${r.date.slice(0, 4)}`]));
+  options(document.getElementById("race"), races.map((r) => [r.id, `${r.city} ${r.date.slice(0, 4)}${r.distance_km && r.distance_km < 42 ? " · 21K" : ""}`]));
   options(document.getElementById("size"), Object.entries(SIZES).map(([k, s]) => [k, s.name]));
   options(document.getElementById("shape"), Object.entries(SHAPES));
   options(document.getElementById("fonts"), Object.entries(FONT_PAIRS).map(([k, f]) => [k, f.name]));
