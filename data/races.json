@@ -13,7 +13,19 @@
       "path": "data/sources/buenos-aires-2016-oficial.geojson",
       "source": "Mapa oficial 2016 de la Asociación Ñandú (Google My Maps «Maratón Ñandú Buenos Aires 2016 IAAF», copia de Wayback Machine)",
       "source_url": "https://web.archive.org/web/20161220101208/http://maratondebuenosaires.com/en/recorrido-42k-9-oct-2016/"
-    }
+    },
+    "extra_labels": [
+      {
+        "kind": "water",
+        "rank": 1,
+        "name": "Río de la Plata",
+        "name_en": "Río de la Plata",
+        "lon": -58.3,
+        "lat": -34.56,
+        "size": 1.5,
+        "area": 1000000.0
+      }
+    ]
   },
   {
     "id": "tokyo-2023",
@@ -29,7 +41,19 @@
       "path": "data/sources/tokyo-official-mymaps.geojson",
       "source": "Traza oficial de la Tokyo Marathon Foundation (Google My Maps del sitio oficial); el recorrido coincide con el mapa oficial de cortes de tránsito de 2023",
       "source_url": "https://www.marathon.tokyo/about/course/"
-    }
+    },
+    "extra_labels": [
+      {
+        "kind": "water",
+        "rank": 1,
+        "name": "東京湾",
+        "name_en": "Tokyo Bay",
+        "lon": 139.775,
+        "lat": 35.628,
+        "size": 1.5,
+        "area": 1000000.0
+      }
+    ]
   },
   {
     "id": "chicago-2023",
@@ -357,7 +381,19 @@
           41.92
         ]
       ]
-    }
+    },
+    "extra_labels": [
+      {
+        "kind": "water",
+        "rank": 1,
+        "name": "Lake Michigan",
+        "name_en": "Lake Michigan",
+        "lon": -87.565,
+        "lat": 41.905,
+        "size": 1.5,
+        "area": 1000000.0
+      }
+    ]
   },
   {
     "id": "san-juan-2025",
@@ -607,7 +643,19 @@
       "path": "data/sources/mar-del-plata-2026-strava-21k.gpx",
       "source": "Circuito costero homologado AIMS (Playa Grande, retome en Constitución y Acceso Norte, extremo sur en Juan B. Justo; los 42K son dos vueltas). Geometría de la ruta oficial en Strava que la organización (Sportsfacilities/NB) publicó para su 21K de Mar del Plata; coincide con los cortes municipales del 19-04-2026",
       "source_url": "https://www.strava.com/routes/3431285424830729236"
-    }
+    },
+    "extra_labels": [
+      {
+        "kind": "water",
+        "rank": 1,
+        "name": "Mar Argentino",
+        "name_en": "Argentine Sea",
+        "lon": -57.49,
+        "lat": -38.01,
+        "size": 1.5,
+        "area": 1000000.0
+      }
+    ]
   },
   {
     "id": "edimburgo-2026",
@@ -623,7 +671,19 @@
       "path": "data/sources/edimburgo-2026-oficial.geojson",
       "source": "Mapa oficial del recorrido 2026 (Edinburgh Marathon Festival, capturado el día de la carrera)",
       "source_url": "https://web.archive.org/web/20260524224857/https://static2.myrunning.uk/m/1060/bc3d1b0c530a002e2d56835670e9e2b8/"
-    }
+    },
+    "extra_labels": [
+      {
+        "kind": "water",
+        "rank": 1,
+        "name": "Firth of Forth",
+        "name_en": "Firth of Forth",
+        "lon": -3.08,
+        "lat": 56.025,
+        "size": 1.5,
+        "area": 1000000.0
+      }
+    ]
   },
   {
     "id": "nyc-2026",

@@ -3,6 +3,7 @@ export const COLOR_KEYS = [
   ["bg", "Fondo"],
   ["water", "Agua"],
   ["green", "Verde"],
+  ["building", "Edificios"],
   ["road1", "Avenidas"],
   ["road2", "Calles"],
   ["road3", "Calles menores"],
@@ -93,4 +94,10 @@ export function contrast(a, b) {
   };
   const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
   return (x + 0.05) / (y + 0.05);
+}
+
+export function mix(a, b, t) {
+  const pa = a.replace("#", "").match(/../g).map((h) => parseInt(h, 16));
+  const pb = b.replace("#", "").match(/../g).map((h) => parseInt(h, 16));
+  return "#" + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, "0")).join("");
 }

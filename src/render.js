@@ -1,6 +1,7 @@
 // Poster renderer: builds a self-contained SVG in millimeters.
-import { THEMES, FONT_PAIRS } from "./themes.js";
+import { THEMES, FONT_PAIRS, mix } from "./themes.js";
 import { fitText } from "./text.js";
+import { drawLabels } from "./labels.js";
 
 const NS = "http://www.w3.org/2000/svg";
 
@@ -34,7 +35,8 @@ export function pageSize(state) {
 }
 
 export function colors(state) {
-  return { ...THEMES[state.theme], ...state.colorOverrides };
+  const t = THEMES[state.theme];
+  return { building: mix(t.bg, t.road3, 0.28), ...t, ...state.colorOverrides };
 }
 
 // Geometry of the map window and the text block.
@@ -122,7 +124,7 @@ let mapCache = { key: null, value: null };
 
 export function projectMap(state, data, L) {
   const key = JSON.stringify([state.race, state.size, state.orient, state.shape, state.bleed,
-    state.text.show, state.zoom, state.offset, state.rotation]);
+    state.text.show, state.zoom, state.offset, state.rotation, !!data.buildings]);
   if (mapCache.key === key) return mapCache.value;
 
   const course = data.course.features.find((f) => f.properties.kind === "course");
@@ -140,7 +142,18 @@ export function projectMap(state, data, L) {
 
   const layers = {};
   for (const f of data.city.features) layers[f.properties.layer] = path(f) || "";
+  if (data.buildings) layers.buildings = data.buildings.features.map((f) => path(f) || "").join("");
+  // Course points every ~2 mm, indexed for label collision tests.
+  const cpts = [];
+  const cc = course.geometry.coordinates.map((q) => proj(q));
+  for (let i = 1; i < cc.length; i++) {
+    const [a, b] = [cc[i - 1], cc[i]];
+    const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 2));
+    for (let j = 0; j < n; j++) cpts.push([a[0] + (b[0] - a[0]) * j / n, a[1] + (b[1] - a[1]) * j / n]);
+  }
   const value = {
+    proj,
+    courseIndex: d3.quadtree(cpts),
     layers,
     course: d3.geoPath(proj.clipExtent(null)).digits(2)(course),
     marks: data.course.features.filter((f) => f.geometry.type === "Point")
@@ -214,6 +227,7 @@ export function renderPoster(state, data, fonts, { guides = true } = {}) {
   el("path", { d: shapePath(L.shape), fill: c.bg }, content);
   if (state.layers.green && map.layers.green) el("path", { d: map.layers.green, fill: c.green }, content);
   if (state.layers.water && map.layers.water) el("path", { d: map.layers.water, fill: c.water }, content);
+  if (state.layers.buildings && map.layers.buildings) el("path", { d: map.layers.buildings, fill: c.building }, content);
   const line = { fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" };
   if (state.layers.rail && map.layers.rail) {
     el("path", { d: map.layers.rail, ...line, stroke: c.rail, "stroke-width": sw.rail, "stroke-dasharray": `${sw.rail * 6} ${sw.rail * 3}`, "stroke-linecap": "butt" }, content);
@@ -225,6 +239,8 @@ export function renderPoster(state, data, fonts, { guides = true } = {}) {
   }
 
   const rw = sw.route;
+  map.routeWidth = rw;
+  drawLabels(content, state, data, map, L, c, fonts, insideMap(L, state));
   if (state.route.halo) {
     el("path", { d: map.course, ...line, stroke: c.bg, "stroke-width": rw * 2.4, "stroke-opacity": 0.85 }, content);
   }
@@ -262,6 +278,25 @@ export function renderPoster(state, data, fonts, { guides = true } = {}) {
 
   if (guides) drawGuides(svg, L);
   return svg;
+}
+
+// Point test for label placement: inside the map window, clear of the page
+// edge and of the title block.
+function insideMap(L, state) {
+  const s = L.shape;
+  const m = 1.5;
+  const textTop = state.text.show && state.shape === "full" ? L.H - L.th - 0.06 * L.H : Infinity;
+  return (x, y) => {
+    if (x < SAFE || x > L.W - SAFE || y < SAFE || y > L.H - SAFE || y > textTop) return false;
+    if (s.kind === "circle") return Math.hypot(x - s.cx, y - s.cy) < s.r - m;
+    if (s.kind === "poly") return d3.polygonContains(s.pts, [x, y]);
+    if (x < s.x + m || x > s.x + s.w - m || y < s.y + m || y > s.y + s.h - m) return false;
+    if (s.kind === "arch") {
+      const r = s.w / 2;
+      return y > s.y + r || Math.hypot(x - (s.x + r), y - (s.y + r)) < r - m;
+    }
+    return true;
+  };
 }
 
 // Vertical fade from transparent to the background, made of stacked rects

@@ -9,7 +9,8 @@ for (const file of readdirSync(dir)) {
   const id = file.replace(/\.geojson$/, "");
   if (only && id !== only) continue;
   const fc = JSON.parse(readFileSync(new URL(file, dir)));
-  const topo = topology({ city: fc }, 2e5);
+  // Buildings need less precision: 1 m is far below what prints.
+  const topo = topology({ city: fc }, id.endsWith(".buildings") ? 4e4 : 2e5);
   topo.bbox = fc.bbox;
   const out = new URL(`${id}.topo.json`, dir);
   writeFileSync(out, JSON.stringify(topo));

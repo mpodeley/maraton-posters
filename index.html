@@ -46,6 +46,7 @@
       <div class="checks">
         <label class="check"><input type="checkbox" data-bind="layers.water"> Agua</label>
         <label class="check"><input type="checkbox" data-bind="layers.green"> Parques</label>
+        <label class="check"><input type="checkbox" data-bind="layers.buildings"> Edificios</label>
         <label class="check"><input type="checkbox" data-bind="layers.rail"> Vías</label>
         <label class="check"><input type="checkbox" data-bind="layers.roads_1"> Avenidas</label>
         <label class="check"><input type="checkbox" data-bind="layers.roads_2"> Calles</label>
@@ -58,6 +59,22 @@
       <label>Rotación <output for="rotation"></output>
         <input type="range" id="rotation" min="-180" max="180" step="1" data-bind="rotation"></label>
       <button type="button" id="recenter" class="link">Recentrar el recorrido</button>
+    </section>
+
+    <section>
+      <h2>Etiquetas</h2>
+      <div class="checks">
+        <label class="check"><input type="checkbox" data-bind="labels.districts"> Barrios</label>
+        <label class="check"><input type="checkbox" data-bind="labels.water"> Ríos y agua</label>
+        <label class="check"><input type="checkbox" data-bind="labels.parks"> Parques</label>
+        <label class="check"><input type="checkbox" data-bind="labels.landmarks"> Lugares</label>
+      </div>
+      <div class="seg">
+        <label><input type="radio" name="lang" value="en" data-bind="labels.lang"> En inglés</label>
+        <label><input type="radio" name="lang" value="local" data-bind="labels.lang"> Idioma original</label>
+      </div>
+      <label>Tamaño de etiquetas <output for="labelScale"></output>
+        <input type="range" id="labelScale" min="0.5" max="2" step="0.05" data-bind="labels.scale"></label>
     </section>
 
     <section>

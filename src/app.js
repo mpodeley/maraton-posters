@@ -1,6 +1,6 @@
 import { THEMES, FONT_PAIRS, COLOR_KEYS, contrast } from "./themes.js";
 import { SIZES, SHAPES, layout, renderPoster, warnings, colors, projectMap } from "./render.js";
-import { loadFont } from "./text.js";
+import { loadFont, needsCjk } from "./text.js";
 import { saveSvg, savePdf, savePng } from "./export.js";
 
 const DEFAULTS = {
@@ -11,7 +11,8 @@ const DEFAULTS = {
   theme: "papel",
   colorOverrides: {},
   fonts: "editorial",
-  layers: { water: true, green: true, rail: true, roads_1: true, roads_2: true, roads_3: true },
+  layers: { water: true, green: true, buildings: true, rail: true, roads_1: true, roads_2: true, roads_3: true },
+  labels: { districts: true, water: true, parks: true, landmarks: false, lang: "en", scale: 1 },
   roadScale: 1,
   zoom: 1,
   offset: [0, 0],
@@ -68,19 +69,37 @@ async function loadRace(id) {
     dataCache.set(id, Promise.all([
       fetch(`data/cities/${id}.topo.json`).then((r) => r.json()),
       fetch(`data/courses/${id}.geojson`).then((r) => r.json()),
-    ]).then(([topo, course]) => ({
+      fetch(`data/cities/${id}.labels.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    ]).then(([topo, course, labels]) => ({
       race,
       city: topojson.feature(topo, topo.objects.city),
       course,
+      // Big water bodies cut by the extract are named by hand in races.json.
+      labels: labels || race.extra_labels ? [...(labels || []), ...(race.extra_labels || [])] : null,
     })));
   }
   return dataCache.get(id);
 }
 
-async function loadFonts() {
+// Building footprints are heavy (up to ~5 MB gzipped): fetched only when shown.
+const buildingCache = new Map();
+function loadBuildings(id) {
+  if (!buildingCache.has(id)) {
+    buildingCache.set(id, fetch(`data/cities/${id}.buildings.topo.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((topo) => (topo ? topojson.feature(topo, topo.objects.city) : null))
+      .catch(() => null));
+  }
+  return buildingCache.get(id);
+}
+
+async function loadFonts(data) {
   const pair = FONT_PAIRS[state.fonts];
   const [title, body, bodyStrong] = await Promise.all([loadFont(pair.title), loadFont(pair.body), loadFont(pair.bodyStrong)]);
-  return { title, body, bodyStrong };
+  // Japanese names need a CJK face; load it only when a visible label uses it.
+  const cjkNeeded = data.labels?.some((lb) => needsCjk(state.labels.lang === "local" ? lb.name : lb.name_en));
+  const cjk = cjkNeeded ? await loadFont("NotoSansJP-500") : null;
+  return { title, body, bodyStrong, cjk };
 }
 
 // ---------- rendering ----------
@@ -92,8 +111,13 @@ let renderToken = 0;
 async function render() {
   const token = ++renderToken;
   status.textContent = "Dibujando…";
-  const [data, fonts] = await Promise.all([loadRace(state.race), loadFonts()]);
+  const base = await loadRace(state.race);
+  const [buildings, fonts] = await Promise.all([
+    state.layers.buildings ? loadBuildings(state.race) : null,
+    loadFonts(base),
+  ]);
   if (token !== renderToken) return;
+  const data = { ...base, buildings };
   current = { data, fonts };
   const svg = renderPoster(state, data, fonts, { guides: state.guides });
   svg.id = "poster";
@@ -103,9 +127,10 @@ async function render() {
   persist();
 }
 
-function scheduleRender() {
+// Sliders fire many events; wait for a pause before re-projecting a city.
+function scheduleRender(delay = 30) {
   clearTimeout(scheduleRender.t);
-  scheduleRender.t = setTimeout(render, 30);
+  scheduleRender.t = setTimeout(render, delay);
 }
 
 function updateInfo(data) {
@@ -263,7 +288,7 @@ function buildControls() {
         state.text.time = race.time || "";
       }
       syncControls();
-      scheduleRender();
+      scheduleRender(input.type === "range" ? 150 : 30);
     });
   });
 
